@@ -1,13 +1,13 @@
 n = int(input())
-count = 0
+distance = list(map(int, input().split()))
+price = list(map(int, input().split()))
 
-for i in range(n):
-    word = input()
-    for j in range(0, len(word)-1):
-        if word[j] == word[j+1]:
-            pass
-        elif word[j] == word[j+1:]:
-            count += 1
-            break
+sum = 0
+min_price = price[0]
+sum += min_price * distance[0]
+for i in range(1, n-1):
+    if min_price > price[i]:
+        min_price = price[i]
+    sum += min_price * distance[i]
 
-print(n - count)
+print(sum)
