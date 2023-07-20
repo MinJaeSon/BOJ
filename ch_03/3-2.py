@@ -5,9 +5,11 @@ data.sort()
 first = data[n - 1]
 second = data[n - 2]
 
-count = int(m / (k+1)) * k + m % (k + 1)
+# 가장 큰 수가 더해지는 횟수 계산
+count = int(m / (k + 1)) * k + m % (k + 1)
 
 result = 0
-result = count * first + (m - count) * second
+result += count * first
+result += (m - count) * second
 
 print(result)
