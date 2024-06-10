@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+# UTF-8 encoding when using korean
+T = int(input())
+for _ in range(T):
+	X, Y, N = map(int, input().split())
+	
+	distance = abs(X) + abs(Y)
+	if distance > N:
+		print("NO")
+	elif (N - distance) % 2 == 0:
+		print("YES")
+	else:
+		print("NO")
+
+	
