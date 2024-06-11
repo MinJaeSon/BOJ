@@ -1,0 +1,20 @@
+# -*- coding: utf-8 -*-
+# UTF-8 encoding when using korean
+N = int(input())
+sum = 0
+
+for _ in range(N):
+	if sum >= 0:
+		c, v = input().split()
+		if c == "in":
+			sum += int(v)
+		else:
+			sum -= int(v)
+			if sum < 0:
+				print("fail")
+				break
+	else:
+		print("fail")
+		break
+		
+if sum >= 0: print("success")
