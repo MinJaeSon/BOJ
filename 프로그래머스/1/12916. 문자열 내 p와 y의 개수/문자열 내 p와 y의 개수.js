@@ -1,3 +1,7 @@
 function solution(s){
-    return s.match(/p/ig)?.length === s.match(/y/ig)?.length;
+    return [...s.toLowerCase()].reduce((acc, cur) => {
+        if(cur ==='p') return acc + 1;
+        else if(cur ==='y') return acc - 1;
+        return acc;
+    }, 0) ? false : true;
 }
