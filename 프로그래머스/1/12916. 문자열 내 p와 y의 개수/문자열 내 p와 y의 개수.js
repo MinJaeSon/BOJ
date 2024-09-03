@@ -1,5 +1,3 @@
 function solution(s){
-    s = s.toLowerCase();
-    if (s.split('p').length === s.split('y').length) return true;
-    else return false;
+    return s.match(/p/ig)?.length === s.match(/y/ig)?.length;
 }
