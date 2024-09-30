@@ -1,14 +1,13 @@
 function solution(s) {
-    var alphabet = new Object();
+    var map = {};
     var result = [];
-    s.split('').forEach((x, i) => {
-        if (x in alphabet) {
-            const sub = i - alphabet[x];
-            alphabet[x] = i;
-            result.push(sub);
+    [...s].map((x, i) => {
+        if (x in map) {
+            result.push(i - map[x]);
+            map[x] = i;
         } else {
-            alphabet[x] = i;
             result.push(-1);
+            map[x] = i;
         }
     })
     return result;
