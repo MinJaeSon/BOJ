@@ -1,9 +1,10 @@
 function solution(array, commands) {
     var result = [];
     commands.map((command) => {
-        const sliced = array.slice(command[0] - 1, command[1])
+        const [start, end, pos] = command // 구조 분해 할당
+        const sliced = array.slice(start - 1, end)
         const sorted = sliced.sort((a, b) => a - b)
-        result.push(sorted[command[2] - 1])
+        result.push(sorted[pos - 1])
     });
     return result;
 }
