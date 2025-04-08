@@ -1,39 +1,53 @@
 function solution(fees, records) {
-  const parking = {};
+    const [ defaultTime, defaultPrice, unitTime, unitPrice ] = fees;
+    let cars = [];
+    
+    records.forEach((record) => {
+        const [ time, carNum, status ] = record.split(' ');
+        if (cars.some((item) => item.num === carNum)) { // 이미 입차 기록이 있는 차인 경우
+            const car = cars.find((item) => item.num === carNum);
+            if (status === 'IN') {  // 다시 입차하는 차라면 
+                car.in = time; // 입차 시간 기록
+            } else { // 출차하는 차라면
+                car.out = time; // 출차 시간 기록
+                
+                // 누적 시간 갱신
+                car.totalTime += getMinutes(car.out) - getMinutes(car.in);
+                
+                // 출차 후 입차 기록에서 해당 번호 차의 입/출차 기록 초기화
+                car.in = '';
+                car.out = '';
+            }
+        } else { // 새로 입차하는 차인 경우
+            // 새로 정보 기록
+            const newCar = {
+                num: carNum,
+                in: time,
+                out: '',
+                totalTime: 0,
+            };
+            cars.push(newCar);
+        }
+    })
+    
+    // 기록상 출차 기록이 없는 차에 대해 시간 계산
+    cars.forEach((car) => {
+        if (car.in && !car.out) {
+            car.totalTime += getMinutes('23:59') - getMinutes(car.in);
+        }
+    })
+    
+    cars = cars.sort((a, b) => Number(a.num) - Number(b.num)); // 차량 번호를 기준으로 오름차순 정렬
+    console.log(cars);
+    
+    // 각 차량에 대해 주차 요금 계산
+    return cars.map((car) => (
+        car.totalTime <= defaultTime ? 
+            defaultPrice : defaultPrice + Math.ceil((car.totalTime - defaultTime) / unitTime) * unitPrice
+    ))
+}
 
-  records.forEach((v) => {
-    const [time, id, status] = v.split(" ");
-    const [hour, minute] = time.split(":");
-    // time을 분으로 통일
-    const replaceTime = hour * 60 + +minute;
-
-    // Object에 입고할 차량이 없다면 등록
-    if (!parking[id]) {
-      parking[id] = { time: 0, id };
-    }
-
-    // 현재 상태 기록
-    parking[id].status = status;
-
-    // 마지막으로 입고한 시간 기록
-    if (status === "IN") {
-      parking[id].lastInTime = replaceTime;
-      return;
-    }
-
-    // 주차 시간에 += (현재 입고 시간 - 마지막 입고 시간)
-    parking[id].time += replaceTime - parking[id].lastInTime;
-  });
-
-  // 차량 번호가 낮은 순서로 비용 return
-  return Object.values(parking)
-    .sort((a, b) => a.id - b.id)
-    .map((v) => {
-      // 최대 시간은 24 * 60 -1 = 1439 (분)
-      if (v.status === "IN") v.time += 1439 - v.lastInTime;
-      // 기본 시간 이내라면 기본 요금
-      if (fees[0] > v.time) return fees[1];
-      // 기본 요금 + (( 주차 시간 - 기본 시간 ) / 단위 시간) * 요금
-      return fees[1] + Math.ceil((v.time - fees[0]) / fees[2]) * fees[3];
-    });
+function getMinutes(time) {
+    const [h, m] = time.split(':').map(Number);
+    return h * 60 + m;
 }
