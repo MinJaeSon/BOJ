@@ -20,12 +20,7 @@ function solution(fees, records) {
             }
         } else { // 새로 입차하는 차인 경우
             // 새로 정보 기록
-            const newCar = {
-                num: carNum,
-                in: time,
-                out: '',
-                totalTime: 0,
-            };
+            const newCar = { num: carNum, in: time, out: '', totalTime: 0};
             cars.push(newCar);
         }
     })
@@ -38,7 +33,6 @@ function solution(fees, records) {
     })
     
     cars = cars.sort((a, b) => Number(a.num) - Number(b.num)); // 차량 번호를 기준으로 오름차순 정렬
-    console.log(cars);
     
     // 각 차량에 대해 주차 요금 계산
     return cars.map((car) => (
@@ -47,6 +41,7 @@ function solution(fees, records) {
     ))
 }
 
+// 문자열로 주어진 시간을 분으로 반환 (총 몇 분인지 구한 후 빼는 것이 시간 계산에 안전함)
 function getMinutes(time) {
     const [h, m] = time.split(':').map(Number);
     return h * 60 + m;
