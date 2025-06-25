@@ -1,20 +1,27 @@
 function solution(today, terms, privacies) {
-    var answer = [];
-    var [year, month, date] = today.split(".").map(Number);
-    var todates = year * 12 * 28 + month * 28 + date;
-    var t = {};
-  
-    terms.forEach((e) => {
-        let [a, b] = e.split(" ");
-        t[a] = Number(b);
+    let result = [];
+    
+    const today_y = Number(today.split(".")[0]);
+    const today_m = Number(today.split(".")[1]);
+    const today_d = Number(today.split(".")[2]);
+    const today_days = today_y * 12 * 28 + today_m * 28 + today_d;
+    
+    let validity_terms = {};
+    terms.forEach((term) => {
+        const [type, num] = term.split(" ");
+        validity_terms[type] = Number(num);
+    })
+    
+    privacies.forEach((privacy, i) => {
+        const date = privacy.split(" ")[0];
+        const y = Number(date.split(".")[0]);
+        const m = Number(date.split(".")[1]);
+        const d = Number(date.split(".")[2]);
+        const type = privacy.split(" ")[1];
+        let days = y * 12 * 28 + (m + validity_terms[type]) * 28 + d ;
+        console.log(today_days, days);
+        if (today_days >= days) result.push(i + 1);
     });
-  
-    privacies.forEach((e, i) => {
-        var [day, term] = e.split(" ");
-        day = day.split(".").map(Number);
-        var dates = day[0] * 12 * 28 + day[1] * 28 + day[2] + t[term] * 28;
-        if (dates <= todates) answer.push(i + 1);
-    });
-  
-    return answer;
+    
+    return result;
 }
