@@ -2,19 +2,21 @@ const fs = require("fs");
 let [N, M, S] = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 N = Number(N);
 M = Number(M);
+
 let count = 0;
+let answer = 0;
 
-let P = 'I';
-for (let i = 1; i <= N; i++) {
-    P += 'OI';
+for (let i = 1; i < M - 1; i++) {
+    if (S[i - 1] === 'I' && S[i] === 'O' && S[i + 1] === 'I') {
+        count++;
+        if (count === N) {
+            answer++;
+            count--;
+        }
+        i++;
+    } else {
+        count = 0;
+    }
 }
 
-let start_idx = S.search(P);
-while (start_idx !== -1 && S.length) {
-    count++;
-    S = S.substring(start_idx + 1);
-
-    start_idx = S.search(P);
-}
-
-console.log(count);
+console.log(answer);
