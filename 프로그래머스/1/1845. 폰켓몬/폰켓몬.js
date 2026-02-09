@@ -1,7 +1,12 @@
 function solution(nums) {
-    const ponketmon = new Set(nums);
-    const kind = ponketmon.size;
-    const num = nums.length / 2;
+    let result = 0;
+    let map = new Map();
     
-    return kind < num ? kind : num;
+    nums.forEach((num) => {
+        map.set(num, (map.get(num) || 0) + 1);    
+    });
+
+    const kind = map.size;
+    const half = nums.length / 2;
+    return kind > half ? half : kind;
 }
