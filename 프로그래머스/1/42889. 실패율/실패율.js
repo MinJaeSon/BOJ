@@ -1,13 +1,19 @@
 function solution(N, stages) {
-    let failRates = [0]; // 각 스테이지별 실패율
+    let result = {};
+    let count = new Map();
+    
+    stages.forEach((stage) => {
+        count.set(stage, (count.get(stage) || 0) + 1);
+    });
+    
+    let arrival = stages.length;
     for (let i = 1; i <= N; i++) {
-        let total = stages.filter((stage) => stage >= i).length;
-        let fail = stages.filter((stage) => stage === i).length;
-        failRates[i] = fail / total;
+        const failure = count.get(i) || 0;
+        result[i] = !failure ? 0 : failure / arrival;
+        arrival -= failure;
     }
-    failRates = failRates.slice(1);
-  
-    return failRates.map((val, idx) => ({ idx: idx + 1, val }))
-        .sort((a, b) => b.val - a.val)
-        .map(el => el.idx);
+    
+    return Object.entries(result)
+                .sort((a, b) => b[1] - a[1])
+                .map((p) => Number(p[0]));
 }
