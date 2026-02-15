@@ -1,21 +1,19 @@
 function solution(topping) {
     let answer = 0;
-    const rMap = new Map();
-    const lSet = new Set();
-    
-    topping.forEach((t) => {
-        rMap.set(t, (rMap.get(t) || 0) + 1);
-    });
+    const leftSet = new Set();
+    const rightMap = new Map();
+    topping.forEach((el) => rightMap.set(el, (rightMap.get(el) || 0) + 1));
     
     for (let i = 0; i < topping.length; i++) {
-        const cur = topping[i];
-        lSet.add(cur);
-        rMap.set(cur, rMap.get(cur) - 1);
-        if (rMap.get(cur) === 0) {
-            rMap.delete(cur);
+        leftSet.add(topping[i]);
+        rightMap.set(topping[i], rightMap.get(topping[i]) - 1);
+        if (rightMap.get(topping[i]) === 0) {
+            rightMap.delete(topping[i]);
         }
         
-        if (lSet.size === rMap.size) answer++;
+        if (leftSet.size === rightMap.size) {
+            answer++;
+        }
     }
     
     return answer;
