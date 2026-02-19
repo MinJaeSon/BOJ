@@ -1,21 +1,14 @@
 function solution(brown, yellow) {
-    let answer = [];
-    let y = [];
-    for (let i = yellow; i >= Math.sqrt(yellow); i--) {
-        if (yellow % i === 0) {
-            y.push([i, yellow / i]);
+    const sum = brown + yellow;
+          
+    for (let a = sum; a > 0; a--) {
+        const b = sum / a;
+        if (!Number.isInteger(b)) continue;
+        if (a < b) break;
+        
+        if ((a + b - 2) * 2 === brown && (a - 2) * (b - 2) === yellow) {
+            return [a, b];
         }
     }
-    
-    for (let i = 0; i < y.length; i++) {
-        const item = y[i];
-        const b_width = item[0] + 2;
-        const b_height = item[1] + 2;
-        if (b_width * b_height - item[0] * item[1] === brown) {
-            answer.push(b_width, b_height);
-            break;
-        }
-    }
-    
-    return answer;
+
 }
