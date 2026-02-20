@@ -1,9 +1,16 @@
 function solution(phone_book) {
-    phone_book = phone_book.sort();
-    for (let i = 0; i < phone_book.length - 1; i++) {
-        if (phone_book[i + 1].startsWith(phone_book[i])) {
-            return false;
+    const hashMap = new Map();
+    phone_book.forEach((phone_num) => hashMap.set(phone_num, 1));
+    
+    for (const phone_num of phone_book) {
+        let prefix = "";
+        for (const n of phone_num) {
+            prefix += n;
+            if (hashMap.has(prefix) && phone_num !== prefix) {
+                return false;
+            }
         }
     }
+    
     return true;
-}
+} 
