@@ -1,15 +1,31 @@
 function solution(want, number, discount) {
-    let result = 0;
-    
-    for (let i = 0; i <= discount.length - 10; i++) {
-        const arr = discount.slice(i, i + 10);
-        let count = 0;
-        for (let j = 0; j < want.length; j++) {
-            if (arr.filter((val) => val === want[j]).length !== number[j]) break;
-            count++;
+    let answer = 0;
+    const wantMap = new Map();
+    const discountMap = new Map();
+    want.forEach((product, i) => wantMap.set(product, number[i]));
+    for (let i = 0; i < 10; i++) {
+        discountMap.set(discount[i], (discountMap.get(discount[i]) || 0) + 1);
+    }
+
+    for (let head = 0; head <= discount.length - 10; head++) {
+        if (head > 0) {
+            const out = discount[head - 1];
+            const add = discount[head + 9];
+            discountMap.set(out, discountMap.get(out) - 1);
+            discountMap.set(add, (discountMap.get(add) || 0) + 1);
+            if (discountMap.get(out) === 0) discountMap.delete(out);
         }
-        if (count === want.length) result++; 
+        
+        let isMatch = true;
+        for (const key of wantMap.keys()) {
+            if (!discountMap.has(key) || wantMap.get(key) !== discountMap.get(key)) {
+                isMatch = false;
+                break;
+            }
+        }
+        
+        if (isMatch) answer++;
     }
     
-    return result;
+    return answer;
 }
