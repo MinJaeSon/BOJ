@@ -1,0 +1,8 @@
+-- 코드를 입력하세요
+SELECT i.NAME, i.DATETIME
+FROM ANIMAL_INS as i
+LEFT JOIN ANIMAL_OUTS as o
+ON i.ANIMAL_ID = o.ANIMAL_ID
+WHERE o.ANIMAL_ID IS NULL -- left join 하면 i에 없는 o는 null로 채워짐
+ORDER BY i.DATETIME
+LIMIT 3;
