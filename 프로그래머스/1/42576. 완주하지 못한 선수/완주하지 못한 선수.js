@@ -1,14 +1,16 @@
-function solution(participant, completion) {    
-    const map = new Map();
-    completion.forEach((c) => map.set(c, (map.get(c) || 0) + 1));
-    for (const p of participant) {
-        if (map.get(p)) {
-            map.set(p, map.get(p) - 1);
-            if (map.get(p) === 0) {
-                map.delete(p);
-            }
-        } else {
-            return p;
-        }
+function solution(participant, completion) {
+    let result = "";
+    let map = new Map();
+    
+    for (let p of participant) {
+        map.set(p, (map.get(p) || 0) + 1);
+    }
+    
+    for (let c of completion) {
+        map.set(c, map.get(c) - 1);
+    }
+    
+    for (const [key, value] of map) {
+        if (value > 0) return key;
     }
 }
