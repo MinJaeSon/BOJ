@@ -1,13 +1,11 @@
 function solution(maps) {
-    const n = maps.length;
-    const m = maps[0].length;
-    
-    const dx = [1, -1, 0, 0];
-    const dy = [0, 0, -1, 1];
+    const dx = [0, 0, -1, 1];
+    const dy = [-1, 1, 0, 0];
+    const [N, M] = [maps.length, maps[0].length]; // 맵의 세로, 가로 길이
+    let answer = -1;
     
     function bfs(x, y) {
         const queue = [[x, y]];
-        // 시작점이 이미 1이기 때문에 방문 처리 따로 x (어차피 현재 위치에서 잘해야 상하좌우로만 이동할 수 있음)
         
         while (queue.length) {
             const [x, y] = queue.shift();
@@ -16,23 +14,21 @@ function solution(maps) {
                 const nx = x + dx[i];
                 const ny = y + dy[i];
                 
-                if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue; // 맵을 벗어나면
+                if (maps[nx][ny] === 0) continue; // 벽이면
+                if (maps[nx][ny] > 1) continue; // 이미 방문 했으면
                 
-                if (maps[nx][ny] === 0) continue;
-                
-                if (maps[nx][ny] === 1) {
-                    queue.push([nx, ny]);
-                    maps[nx][ny] = maps[x][y] + 1;    
-                }
+                queue.push([nx, ny]);
+                maps[nx][ny] = maps[x][y] + 1;
             }
-        }
-        
-        if (maps[n - 1][m - 1] === 1) {
-            return -1;
-        } else {
-            return maps[n - 1][m - 1];   
         }
     }
     
-    return bfs(0, 0);
+    bfs(0, 0);
+    
+    if (maps[N - 1][M - 1] === 1) {
+        return -1;
+    } else {
+        return maps[N - 1][M - 1];
+    }
 }
