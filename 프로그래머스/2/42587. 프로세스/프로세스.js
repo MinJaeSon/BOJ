@@ -1,18 +1,23 @@
 function solution(priorities, location) {
-    let answer = 0;
+    let ans = 0;
+    let queue = priorities.map((priority, idx) => [priority, idx]);
     let max = Math.max(...priorities);
-    let indices = priorities.map((_, i) => i);
+    let count = 0;
     
-    while (priorities.length) {
-        max = Math.max(...priorities);
-        
-        if (priorities[0] < max) {
-            priorities.push(priorities.shift());
-            indices.push(indices.shift());
+    while (queue.length) {
+        const head = queue.shift();
+        if (head[0] < max) {
+            queue.push(head);
         } else {
-            answer++;
-            priorities.shift();
-            if (indices.shift() === location) return answer;
+            count++;
+            if (location === head[1]) {
+                ans = count;
+                break;
+            } else {
+                max = Math.max(...queue.map((el) => el[0]));
+            }
         }
     }
+ 
+    return ans;
 }
