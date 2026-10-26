@@ -1,58 +1,54 @@
 function solution(maps) {
-    const N = maps[0].length;
-    const M = maps.length;
+    const dx = [0, 0, -1, 1];
+    const dy = [-1, 1, 0, 0];
     
-    let count_l = 0;
-    let count_e = 0;
+    const N = maps.length;
+    const M = maps[0].length;
     
-    const dx = [-1, 1, 0, 0];
-    const dy = [0, 0, -1, 1];
-    
-    for (let x = 0; x < M; x++) {
-        for (let y = 0; y < N; y++) {
-            if (maps[x][y] === 'S') {
-                let [x_l, y_l] = [0, 0]; 
-                let [x_e, y_e] = [0, 0]; 
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < M; j++) {
+            if (maps[i][j] === 'S') {
+                const l_result = bfs(i, j, 0, 'L');
+                if (!l_result) return -1;
+                const [l_end_x, l_end_y, l_dist] = l_result;
                 
-                const res_l = bfs(x, y, 0, 'L');
-                if (!res_l) return -1;
-                [x_l, y_l, count_l] = res_l;
+                const e_result = bfs(l_end_x, l_end_y, 0, 'E');
+                if (!e_result) return -1;
+                const [e_end_x, e_end_y, e_dist] = e_result;
                 
-                const res_e = bfs(x_l, y_l, 0, 'E');
-                if (!res_e) return -1;
-                [x_e, y_e, count_e] = res_e;
-                
-                return count_l + count_e;
+                return l_dist + e_dist;
             }
         }
     }
     
-    function bfs(x_cur, y_cur, count, target) {
-        const queue = [[x_cur, y_cur, count]];
-        const visited = Array.from({ length: M }, () => Array(N).fill(false));
-        visited[x_cur][y_cur] = true;
+    
+    
+    function bfs(start_x, start_y, dist, end) {
+        const queue = [[start_x, start_y, dist]];
+        const visited = Array.from({ length: N }, () => Array(M).fill(false));
+        visited[start_x][start_y] = true;
         
         while (queue.length) {
-            const [x, y, c] = queue.shift();
+            const [x, y, d] = queue.shift();
             
-            if (maps[x][y] === target) {
-                return [x, y, c];
+            if (maps[x][y] === end) {
+                return [x, y, d];
             }
             
             for (let i = 0; i < 4; i++) {
                 const nx = x + dx[i];
                 const ny = y + dy[i];
-                const nc = c + 1;
+                const nd = d + 1;
                 
-                if (nx < 0 || ny < 0 || nx >= M || ny >= N) continue;
-                if (visited[nx][ny] === true) continue;
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
                 if (maps[nx][ny] === 'X') continue;
+                if (visited[nx][ny]) continue;
                 
+                queue.push([nx, ny, nd]);
                 visited[nx][ny] = true;
-                queue.push([nx, ny, nc]);
             }
         }
         
-        return null;
+        return false;
     }
 }
