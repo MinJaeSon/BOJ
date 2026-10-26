@@ -1,22 +1,20 @@
 function solution(triangle) {
-    let ans = 0;
-    const dp = [...triangle];
+    let d = [...triangle];
     
-    for (let i = 1; i < triangle.length; i++) {
+    d[1][0] = d[0][0] + d[1][0];
+    d[1][1] = d[0][0] + d[1][1];
+    
+    for (let i = 2; i < triangle.length; i++) {
         for (let j = 0; j < triangle[i].length; j++) {
             if (j === 0) {
-                dp[i][j] += dp[i-1][j];    
-            } else if (j === dp[i].length - 1) {
-                dp[i][j] += dp[i-1][j-1];
+                d[i][j] = d[i-1][0] + d[i][j];
+            } else if (j === triangle[i].length - 1) {
+                d[i][j] = d[i-1][j-1] + d[i][j];
             } else {
-                dp[i][j] += Math.max(dp[i-1][j], dp[i-1][j-1]);    
+                d[i][j] = Math.max(d[i-1][j-1], d[i-1][j]) + d[i][j];
             }
         }
     }
     
-    for (let sum of dp[triangle.length - 1]) {
-        ans = Math.max(ans, sum);
-    }
-    
-    return ans;
+    return Math.max(...d[triangle.length - 1]);
 }
